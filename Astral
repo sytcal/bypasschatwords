@@ -1,10 +1,31 @@
+--[[
+
+🤑 https://discord.gg/6D4Hven87S 🤑
+
+--]]
+
+repeat task.wait() until game:IsLoaded()
+
+local TCS = game:GetService("TextChatService")
+local CoreGui = game:GetService("CoreGui")
+local RStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer.PlayerGui
+
+local isLegacy = TCS.ChatVersion == Enum.ChatVersion.LegacyChatService
+local ChatBar = CoreGui:FindFirstChild("TextBoxContainer", true) or PlayerGui:FindFirstChild("Chat"):FindFirstChild("ChatBar", true)
+ChatBar = ChatBar:FindFirstChild("TextBox") or ChatBar
+
 local Keywords = {
     {"you fucking retard", "yo⁥⁥⁥⁥⁥⁥uf⁥⁥⁥⁥⁥⁥⁥⁥⁥u⁥⁥⁥⁥⁥⁥⁥⁥⁥c⁥⁥⁥⁥⁥⁥⁥⁥⁥k⁥⁥i⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥n⁥gr⁥⁥⁥⁥⁥⁥e⁥⁥t⁥⁥⁥⁥⁥⁥ar⁥⁥⁥⁥⁥⁥d"},
     {"shut up faggot and die", "s⁥⁥⁥⁥⁥⁥⁥⁥һu⁥⁥⁥⁥⁥⁥⁥⁥tu⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥pf⁥⁥⁥⁥⁥⁥⁥⁥а⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ɡɡ⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥o⁥⁥⁥⁥⁥⁥⁥⁥tan⁥⁥⁥⁥⁥⁥⁥⁥ddi⁥⁥⁥⁥⁥⁥⁥⁥е"},
     {"you fucking nigger", "yоufu⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥сk⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥іn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥gn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥і⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ggе⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥r"},
     {"fucking nigger", "fu⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥сk⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥іn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥gn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥і⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ggе⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥r"},
-    {"shit", "s⁥⁥⁥⁥⁥⁥⁥⁥һit"},
-    {"nexar", "nexar x on top"},
     {"shut up nigger and die", "s⁥⁥⁥⁥⁥⁥⁥⁥һu⁥⁥⁥⁥⁥⁥⁥⁥tu⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥pn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥і⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ggе⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ran⁥⁥⁥⁥⁥⁥⁥⁥ddi⁥⁥⁥⁥⁥⁥⁥⁥е"},
     {"lil nigga", "li⁥⁥⁥⁥⁥⁥⁥⁥⁥ӏn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥і⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥ggа"},
     {"fucking", "fu⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥сk⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥іn⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥⁥g"},
@@ -51,8 +72,6 @@ local Keywords = {
     {"zoophile", "zоорһіӏе"},
     {"lmao", "LМАО"},
     {"lmfao", "LМFАО"},
-    {"LMAO", "LМАО"},
-    {"LMFAO", "LМFАО"},
     {"george", "gеоrgе"},
     {"floyd", "flоуd"},
     {"sexual", "⁥⁥⁥⁥⁥ѕ⁥⁥⁥⁥⁥е⁥⁥⁥⁥⁥х⁥⁥⁥⁥⁥ual"},
@@ -68,12 +87,122 @@ local Keywords = {
     {"pedo", "⁥⁥⁥⁥⁥р⁥⁥⁥⁥⁥е⁥⁥⁥⁥⁥ɗ⁥⁥⁥⁥⁥о⁥⁥⁥⁥⁥"},
     {"hate", "һаtе"},
     {"balls", "bаӏӏѕ"},
-    {" ", ""},
-    {"shit", "s⁥⁥⁥⁥⁥⁥⁥⁥һit"},
-    {"bitch", "bi⁥⁥⁥⁥⁥⁥⁥⁥tсһ"},
-    {"kill", "kіll"},
-    {"yourself", "уоurѕеlf"},
-    {"Ballsack", "Вallsack"},
-    {"shoot", "shооt"},
-    {"meth", "mеth"}
+    {" ", ""}
 }
+
+local Gen = function(Message)
+    for _, info in Keywords do
+        local real = info[1]
+        local bypass = info[2]
+        Message = Message:gsub(real, bypass)
+    end
+    return Message
+end
+
+local Connection = Instance.new("BindableFunction")
+
+for _, c in getconnections(ChatBar.FocusLost) do
+    c:Disconnect()
+end
+
+ChatBar.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        Connection:Invoke(ChatBar.Text)
+        ChatBar.Text = ""
+    end
+end)
+
+Connection.OnInvoke = function(Message)
+    Message = Gen(Message)
+    if isLegacy then
+        local ChatRemote = RStorage:FindFirstChild("SayMessageRequest", true)
+        ChatRemote:FireServer(Message, "All")
+    else
+        local Channel = TCS.TextChannels.RBXGeneral
+        Channel:SendAsync(Message)
+    end
+end
+
+local NotifyModule = {}
+
+if not NotifyGui then
+    getgenv().NotifyGui = Instance.new("ScreenGui")
+    getgenv().Template = Instance.new("TextLabel")
+    
+    if syn then
+        if gethui then
+            gethui(NotifyGui)
+        else
+            syn.protect_gui(NotifyGui)
+        end
+    end
+    
+    NotifyGui.Name = "Notification"
+    NotifyGui.Parent = CoreGui
+    
+    Template.Name = "Template"
+    Template.Parent = NotifyGui
+    Template.AnchorPoint = Vector2.new(.5, .5)
+    Template.BackgroundTransparency = 1
+    Template.BorderSizePixel = 0
+    Template.Position = UDim2.new(.5, 0, 1.5, 0)
+    Template.Size = UDim2.new(.8, 0, .1, 0)
+    Template.Font = Enum.Font.Code
+    Template.Text = ""
+    Template.TextSize = 30
+    Template.TextWrapped = true
+end
+
+local Tween = function(Object, Time, Style, Direction, Property)
+    return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
+end
+
+function NotifyModule:Notify(Text, Duration)
+    task.spawn(function()
+        local Clone = Template:Clone()
+        Clone.Name = "ClonedNotification"
+        Clone.Parent = NotifyGui
+        Clone.Text = Text
+        Clone.TextColor3 = Color3.fromRGB(75, 121, 233)
+
+        local UIStroke = Instance.new("UIStroke")
+        UIStroke.Parent = Clone
+        UIStroke.Thickness = 1
+        UIStroke.Transparency = 0.5
+        
+        if not Duration or Duration == nil then
+            Duration = 5
+        end
+        
+        local FinalPosition = 0
+        
+        for _, x in next, NotifyGui:GetChildren() do
+            if x.Name ~= "Template" then
+                FinalPosition += .125
+            end
+        end
+        
+        local TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, .95 - FinalPosition, 0)})
+        TweenPos:Play()
+        TweenPos.Completed:wait()
+        
+        wait(Duration)
+        
+        TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, 1.5, 0)})
+        TweenPos:Play()
+        TweenPos.Completed:wait()
+        
+        Clone:Destroy()
+    end)
+end
+
+NotifyModule:Notify("Astral Hub's chat bypass loaded ► press 0 to join our discord", 5)
+
+local Connection
+Connection = UserInputService.InputBegan:Connect(function(Input, GPE)
+    if GPE or Input.KeyCode ~= Enum.KeyCode.Zero then return end
+
+    NotifyModule:Notify("copied invite link to clipboard")
+    setclipboard("https://discord.gg/6D4Hven87S")
+    Connection:Disconnect()
+end)
